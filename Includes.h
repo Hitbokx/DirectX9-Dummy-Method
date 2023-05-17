@@ -11,3 +11,4 @@
 #include "dxStuff.h"
 #include "HookingClass.h"
 #include "Vector.h"
+#include "hack.h"

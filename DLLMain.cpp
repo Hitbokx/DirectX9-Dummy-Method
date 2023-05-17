@@ -14,7 +14,7 @@ void APIENTRY hkEndScene( LPDIRECT3DDEVICE9 o_pDevice )
 
 	DrawFilledRect( 25, 25, 100, 100, D3DCOLOR_ARGB( 255, 0, 255, 255 ) );
 
-	DrawFilledRect(windowWidth/2-2,windowHeight / 2 - 2, )
+	DrawFilledRect( windowWidth / 2 - 2, windowHeight / 2 - 2, 4, 4, D3DCOLOR_ARGB( 255, 255, 255, 255 ) );
 
 	oEndScene( pDevice );
 }

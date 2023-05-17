@@ -150,10 +150,13 @@
     <ClCompile Include="DLLMain.cpp" />
     <ClCompile Include="Drawing.cpp" />
     <ClCompile Include="dxStuff.cpp" />
+    <ClCompile Include="hack.cpp" />
   </ItemGroup>
   <ItemGroup>
+    <ClInclude Include="Classes.h" />
     <ClInclude Include="Drawing.h" />
     <ClInclude Include="dxStuff.h" />
+    <ClInclude Include="hack.h" />
     <ClInclude Include="HookingClass.h" />
     <ClInclude Include="Includes.h" />
     <ClInclude Include="Vector.h" />
