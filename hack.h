@@ -24,5 +24,13 @@ struct vec4
 class Hack
 {
 public:
-	uintptr_t entityList{ EntityList }
-};
+	PlayerEnt* localPlayer{};
+	EntityList* entList{};
+
+	float viewMatrix[16];
+
+	void Init( );
+	void Update( );
+	bool CheckValidEnt( PlayerEnt* ent );
+	bool WorldToScreen( vec3 pos, vec2& screen );
+}

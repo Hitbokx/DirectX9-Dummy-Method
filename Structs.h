@@ -16,12 +16,13 @@ struct offsets_t
 	uintptr_t clientState{ 0x465a58 };
 	uintptr_t ViewAnglesW{ 0x46a5dc };
 	uintptr_t MaxClients{ 0x465d0c };
+	uintptr_t dwViewMatrix{ 0x59EA08 };
 };
 
 struct ModuleBases
 {
-	uintptr_t cModuleBase{ (uintptr_t)GetModuleHandle( L"client.dll" ) };
-	uintptr_t eModuleBase{ (uintptr_t)GetModuleHandle( L"engine.dll" ) };
+	uintptr_t client{ (uintptr_t)GetModuleHandle( L"client.dll" ) };
+	uintptr_t engine{ (uintptr_t)GetModuleHandle( L"engine.dll" ) };
 };
 
 struct bools_t
@@ -73,3 +74,4 @@ inline bools_t bools{};
 inline values_t val{};
 inline FLAG_t FLAG{};
 inline ForceMask_t force{};
+inline ModuleBases modBase{};
