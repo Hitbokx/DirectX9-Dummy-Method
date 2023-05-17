@@ -95,11 +95,6 @@ public:
 	}
 };
 
-struct Vec4
-{
-	float x, y, z, w;
-};
-
 struct Vector4
 {
 	float values[4];

@@ -159,6 +159,7 @@
     <ClInclude Include="hack.h" />
     <ClInclude Include="HookingClass.h" />
     <ClInclude Include="Includes.h" />
+    <ClInclude Include="Structs.h" />
     <ClInclude Include="Vector.h" />
   </ItemGroup>
   <Import Project="$(VCTargetsPath)\Microsoft.Cpp.targets" />

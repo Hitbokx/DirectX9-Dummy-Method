@@ -12,3 +12,5 @@
 #include "HookingClass.h"
 #include "Vector.h"
 #include "hack.h"
+#include "Classes.h"
+#include "Structs.h"
