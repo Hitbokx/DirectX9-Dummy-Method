@@ -1,18 +1,20 @@
-#include "Includes.h"
+#include "hack.h"
+#include "dxStuff.h"
 
 void Hack::Init( )
 {
-	entList = (EntityList*)(modBase.client + offs.entList);
-	localPlayer = (PlayerEnt*)(modBase.client + offs.localPlayer);
+	//entList = *(EntityList**)(modBase.client + offs.entList);
+	//localPlayer = *(PlayerEnt**)(modBase.client + offs.localPlayer);
 }
 
 void Hack::Update( )
 {
-	memcpy( &viewMatrix, (PBYTE*)(modBase.engine + offs.dwViewMatrix), sizeof( viewMatrix ) );
+	//memcpy( &viewMatrix, (PBYTE*)(modBase.engine + offs.dwViewMatrix), sizeof( viewMatrix ) );
 }
 
-bool Hack::CheckValidEnt( PlayerEnt* ent )
+bool Hack::CheckValidEnt( PlayerEnt* ent, PlayerEnt* localPlayer )
 {
+
 	if ( ent == nullptr )
 		return false;
 
@@ -28,10 +30,9 @@ bool Hack::CheckValidEnt( PlayerEnt* ent )
 	return true;
 }
 
-bool  Hack::WorldToScreen( vec3 pos, vec2& screen )
+bool  Hack::WorldToScreen( Vector3 pos, vec2& screen, float viewMatrix[16] )
 {
-	vec4 clipCoords{};
-
+	vec4 clipCoords;
 	clipCoords.x = pos.x * viewMatrix[0] + pos.y * viewMatrix[1] + pos.z * viewMatrix[2] + viewMatrix[3];
 	clipCoords.y = pos.x * viewMatrix[4] + pos.y * viewMatrix[5] + pos.z * viewMatrix[6] + viewMatrix[7];
 	clipCoords.z = pos.x * viewMatrix[8] + pos.y * viewMatrix[9] + pos.z * viewMatrix[10] + viewMatrix[11];
@@ -40,13 +41,12 @@ bool  Hack::WorldToScreen( vec3 pos, vec2& screen )
 	if ( clipCoords.w < 0.1f )
 		return false;
 
-	vec3 NDC{};
+	Vector3 NDC;
 	NDC.x = clipCoords.x / clipCoords.w;
 	NDC.y = clipCoords.y / clipCoords.w;
 	NDC.z = clipCoords.z / clipCoords.w;
 
 	screen.x = (windowWidth / 2 * NDC.x) + (NDC.x + windowWidth / 2);
 	screen.y = -(windowHeight / 2 * NDC.y) + (NDC.y + windowHeight / 2);
-
 	return true;
 }

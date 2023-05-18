@@ -1,4 +1,5 @@
 #pragma once
+#include <d3d9.h>
 
 //using tEndScene = HRESULT( APIENTRY* )(LPDIRECT3DDEVICE9 pDevice);
 

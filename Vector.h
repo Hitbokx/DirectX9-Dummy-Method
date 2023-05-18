@@ -55,9 +55,9 @@ public:
 
 	Vector3( Vector3& rhs )
 	{
-		this->x = x;
-		this->y = y;
-		this->z = z;
+		this->x = rhs.x;
+		this->y = rhs.y;
+		this->z = rhs.z;
 	}
 
 	Vector3& operator=( const Vector3& rhs )
@@ -84,12 +84,12 @@ public:
 		return sqrtf( x * x + y * y + z * z ); 
 	}
 
-	Vector3 Normalize( ) const 
+	Vector3 Normalize( ) const
 	{ 
 		return *this * (1 / Length( )); 
 	}
 
-	float Distance( const Vector3& rhs ) const 
+	float Distance( const Vector3& rhs ) const
 	{
 		return (*this - rhs).Length( ); 
 	}

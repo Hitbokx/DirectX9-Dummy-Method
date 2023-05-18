@@ -16,7 +16,7 @@ struct offsets_t
 	uintptr_t clientState{ 0x465a58 };
 	uintptr_t ViewAnglesW{ 0x46a5dc };
 	uintptr_t MaxClients{ 0x465d0c };
-	uintptr_t dwViewMatrix{ 0x59EA08 };
+	uintptr_t dwViewMatrix{ 0x59e9c8 };
 };
 
 struct ModuleBases

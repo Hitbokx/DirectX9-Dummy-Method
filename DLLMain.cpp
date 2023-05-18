@@ -6,13 +6,43 @@ void* d3d9Device[119];
 BYTE EndSceneBytes[7]{ 0 };
 tEndScene oEndScene{ nullptr };
 extern LPDIRECT3DDEVICE9 pDevice{ nullptr };
+Hack* hack{};
 
 void APIENTRY hkEndScene( LPDIRECT3DDEVICE9 o_pDevice )
 {
 	if ( !pDevice )
 		pDevice = o_pDevice;
 
-	DrawFilledRect( 25, 25, 100, 100, D3DCOLOR_ARGB( 255, 0, 255, 255 ) );
+	EntityList* pEntList = *(EntityList**)(modBase.client + offs.entList);
+	PlayerEnt* pLocalPlayer{ *(PlayerEnt**)(modBase.client + offs.localPlayer) };
+	int numPlayers{ *(int*)(modBase.engine + offs.numPlayers) };
+
+	for ( int i{ 1 }; i < numPlayers; ++i )
+	{
+		PlayerEnt* currEnt{ (PlayerEnt*)(pEntList->EntList[i].m_pEntity) };
+
+		if ( !(hack->CheckValidEnt( currEnt, pLocalPlayer )) )
+			continue;
+
+		D3DCOLOR colour{};
+
+		if ( currEnt->team == pLocalPlayer->team )
+			colour = D3DCOLOR_ARGB( 255, 0, 255, 0 );
+		else
+			colour = D3DCOLOR_ARGB( 255, 255, 0, 0 );
+
+		float viewMatrix[16]{};
+
+		memcpy( &viewMatrix, (PBYTE*)(modBase.engine + offs.dwViewMatrix), sizeof( viewMatrix ) );
+
+		vec2 entPos2D{};
+		//currEnt->playerCoordinates
+		//Vector3 coords{ -3084, 2612, -388 };
+
+		if ( hack->WorldToScreen( currEnt->playerCoordinates, entPos2D, viewMatrix ) )
+			DrawLine( entPos2D.x, entPos2D.y, windowWidth / 2, windowHeight, 2, colour );
+
+	}
 
 	DrawFilledRect( windowWidth / 2 - 2, windowHeight / 2 - 2, 4, 4, D3DCOLOR_ARGB( 255, 255, 255, 255 ) );
 

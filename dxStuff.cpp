@@ -1,6 +1,6 @@
 #include "Includes.h"
 
-int windowHeight{}, windowWidth{};
+int windowHeight{0}, windowWidth{0};
 
 BOOL CALLBACK enumWind( HWND handle, LPARAM lp )
 {
@@ -21,13 +21,16 @@ HWND GetProcessWindow( )
 
 	EnumWindows( enumWind, NULL );
 
-	RECT size{};
-	GetWindowRect( window, &size );
-	windowWidth = size.right - size.left;
-	windowHeight = size.bottom - size.top;
+	RECT rect;
 
-	///windowHeight-=29;
-	/// windowWidth-=5;
+	if ( GetWindowRect( window, &rect ) )
+	{
+		windowWidth = rect.right - rect.left;
+		windowHeight = rect.bottom - rect.top;
+	}
+
+	windowWidth += 171;
+	windowHeight += 138;
 
 	return window;
 }

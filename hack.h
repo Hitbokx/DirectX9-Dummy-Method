@@ -1,16 +1,11 @@
 #pragma once
+#include "Classes.h"
+#include "Structs.h"
 
 struct vec2
 {
 	float x{};
 	float y{};
-};
-
-struct vec3
-{
-	float x{};
-	float y{};
-	float z{};
 };
 
 struct vec4
@@ -27,10 +22,8 @@ public:
 	PlayerEnt* localPlayer{};
 	EntityList* entList{};
 
-	float viewMatrix[16];
-
 	void Init( );
 	void Update( );
-	bool CheckValidEnt( PlayerEnt* ent );
-	bool WorldToScreen( vec3 pos, vec2& screen );
-}
+	bool CheckValidEnt( PlayerEnt* ent, PlayerEnt* localPlayer );
+	bool WorldToScreen( Vector3 pos, vec2& screen, float viewMatrix[16] );
+};
