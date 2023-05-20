@@ -3,7 +3,6 @@
 #include "Includes.h"
 
 void* d3d9Device[119];
-BYTE EndSceneBytes[7]{ 0 };
 tEndScene oEndScene{ nullptr };
 extern LPDIRECT3DDEVICE9 pDevice{ nullptr };
 Hack* hack{};
@@ -35,16 +34,47 @@ void APIENTRY hkEndScene( LPDIRECT3DDEVICE9 o_pDevice )
 
 		memcpy( &viewMatrix, (PBYTE*)(modBase.engine + offs.dwViewMatrix), sizeof( viewMatrix ) );
 
-		vec2 entPos2D{};
-		//currEnt->playerCoordinates
-		//Vector3 coords{ -3084, 2612, -388 };
+		Vector3 entHead3D{ hack->GetBonePos( currEnt, 0 ) };
+		for ( int i{ 0 }; i < 69; ++i )
+		{
+			Vector3 entHead = hack->GetBonePos( currEnt, i );
 
-		if ( hack->WorldToScreen( currEnt->playerCoordinates, entPos2D, viewMatrix ) )
+			if ( entHead.x == 0 || entHead.y == 0 || entHead.z == 0 )
+				break;
+
+			if ( entHead.z > entHead3D.z )
+			{
+				entHead3D = entHead;
+			}
+		}
+		entHead3D.z += 8;
+		vec2 entPos2D{};
+		vec2 entHead2D{};
+		// snapline
+		if ( hack->WorldToScreen( currEnt->playerCoordinates, entPos2D ) ) 
+		{
 			DrawLine( entPos2D.x, entPos2D.y, windowWidth / 2, windowHeight, 2, colour );
 
+			if ( hack->WorldToScreen( entHead3D, entHead2D ) ) 
+			{
+				DrawESPBox2D( entHead2D, entPos2D, 2, colour );
+			}
+		}
 	}
 
-	DrawFilledRect( windowWidth / 2 - 2, windowHeight / 2 - 2, 4, 4, D3DCOLOR_ARGB( 255, 255, 255, 255 ) );
+	hack->crossHair2D.x = windowWidth / 2;
+	hack->crossHair2D.y = windowHeight / 2;
+
+	vec2 l, r, t, b;
+
+	l = r = t = b = hack->crossHair2D;
+	l.x -= hack->crossHairSize;
+	r.x += hack->crossHairSize;
+	b.y += hack->crossHairSize;
+	t.y -= hack->crossHairSize;
+
+	DrawLine( l, r, 2, D3DCOLOR_ARGB( 255, 255, 255, 255 ) );
+	DrawLine( t, b, 2, D3DCOLOR_ARGB( 255, 255, 255, 255 ) );
 
 	oEndScene( pDevice );
 }
@@ -58,14 +88,15 @@ DWORD WINAPI myThreadProc( HMODULE hInstDLL )
 
 	if ( GetD3D9Device( d3d9Device, sizeof( d3d9Device ) ) )
 	{
-		memcpy( EndSceneBytes, (char*)d3d9Device[42], 7 );
-
 		oEndScene = (tEndScene)g_hook.TrampHook32<7>( (BYTE*)d3d9Device[42], (BYTE*)hkEndScene );
 	}
 
+	hack = new Hack( );
+	hack->Init( );
+
 	while ( !(GetAsyncKeyState( VK_END )) )
 	{
-
+		hack->Update( );
 		Sleep( 1 );
 	}
 

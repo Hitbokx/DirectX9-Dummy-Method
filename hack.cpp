@@ -3,13 +3,13 @@
 
 void Hack::Init( )
 {
-	//entList = *(EntityList**)(modBase.client + offs.entList);
-	//localPlayer = *(PlayerEnt**)(modBase.client + offs.localPlayer);
+	entList = *(EntityList**)(modBase.client + offs.entList);
+	localPlayer = *(PlayerEnt**)(modBase.client + offs.localPlayer);
 }
 
 void Hack::Update( )
 {
-	//memcpy( &viewMatrix, (PBYTE*)(modBase.engine + offs.dwViewMatrix), sizeof( viewMatrix ) );
+	memcpy( &viewMatrix, (PBYTE*)(modBase.engine + offs.dwViewMatrix), sizeof( viewMatrix ) );
 }
 
 bool Hack::CheckValidEnt( PlayerEnt* ent, PlayerEnt* localPlayer )
@@ -30,7 +30,7 @@ bool Hack::CheckValidEnt( PlayerEnt* ent, PlayerEnt* localPlayer )
 	return true;
 }
 
-bool  Hack::WorldToScreen( Vector3 pos, vec2& screen, float viewMatrix[16] )
+bool  Hack::WorldToScreen( Vector3 pos, vec2& screen )
 {
 	vec4 clipCoords;
 	clipCoords.x = pos.x * viewMatrix[0] + pos.y * viewMatrix[1] + pos.z * viewMatrix[2] + viewMatrix[3];
@@ -49,4 +49,17 @@ bool  Hack::WorldToScreen( Vector3 pos, vec2& screen, float viewMatrix[16] )
 	screen.x = (windowWidth / 2 * NDC.x) + (NDC.x + windowWidth / 2);
 	screen.y = -(windowHeight / 2 * NDC.y) + (NDC.y + windowHeight / 2);
 	return true;
+}
+
+Vector3 Hack::GetBonePos( PlayerEnt* ent, int boneID )
+{
+	Vector3 bonePos{};
+
+	auto boneArrayAccess{ ent->pBoneMatrix };
+
+	bonePos.x = (*boneArrayAccess)[boneID].matrix[3];
+	bonePos.y = (*boneArrayAccess)[boneID].matrix[7];
+	bonePos.z = (*boneArrayAccess)[boneID].matrix[11];
+
+	return bonePos;
 }

@@ -1,9 +1,9 @@
 #pragma once
 #include <d3d9.h>
 
-//using tEndScene = HRESULT( APIENTRY* )(LPDIRECT3DDEVICE9 pDevice);
+using tEndScene = HRESULT( APIENTRY* )(LPDIRECT3DDEVICE9 pDevice);
 
-typedef HRESULT( APIENTRY* tEndScene )(LPDIRECT3DDEVICE9 pDevice);
+//typedef HRESULT( APIENTRY* tEndScene )(LPDIRECT3DDEVICE9 pDevice);
 
 bool GetD3D9Device( void** pTable, size_t size );
 
