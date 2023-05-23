@@ -1,6 +1,12 @@
 #include "hack.h"
 #include "dxStuff.h"
 
+Hack::~Hack( )
+{
+	this->FontF->Release( );
+	this->LineL->Release( );
+}
+
 void Hack::Init( )
 {
 	entList = *(EntityList**)(modBase.client + offs.entList);
@@ -10,6 +16,40 @@ void Hack::Init( )
 void Hack::Update( )
 {
 	memcpy( &viewMatrix, (PBYTE*)(modBase.engine + offs.dwViewMatrix), sizeof( viewMatrix ) );
+	this->checkButtons( );
+}
+
+void Hack::checkButtons( )
+{
+	if ( GetAsyncKeyState( button.showMenu ) & 1 )
+		settings.showMenu = !settings.showMenu;
+
+	if ( GetAsyncKeyState( button.snapLines ) & 1 )
+		settings.snapLines = !settings.snapLines;
+
+	if ( GetAsyncKeyState( button.box2D ) & 1 )
+		settings.box2D = !settings.box2D;
+
+	if ( GetAsyncKeyState( button.status2D ) & 1 )
+		settings.status2D = !settings.status2D;
+
+	if ( GetAsyncKeyState( button.statusText ) & 1 )
+		settings.statusText = !settings.statusText;
+
+	if ( GetAsyncKeyState( button.box3D ) & 1 )
+		settings.box3D = !settings.box3D;
+
+	if ( GetAsyncKeyState( button.velEsp ) & 1 )
+		settings.velEsp = !settings.velEsp;
+
+	if ( GetAsyncKeyState( button.headlineEsp ) & 1 )
+		settings.headlineEsp = !settings.headlineEsp;
+
+	if ( GetAsyncKeyState( button.rcsCrosshair ) & 1 )
+		settings.rcsCrosshair = !settings.rcsCrosshair;
+
+	if ( GetAsyncKeyState( button.showTeamates ) & 1 )
+		settings.showTeamates = !settings.showTeamates;
 }
 
 bool Hack::CheckValidEnt( PlayerEnt* ent, PlayerEnt* localPlayer )
@@ -21,7 +61,7 @@ bool Hack::CheckValidEnt( PlayerEnt* ent, PlayerEnt* localPlayer )
 	if ( ent == localPlayer )
 		return false;
 
-	if ( ent->health <= 0 )
+	if ( ent->health <= 1 )
 		return false;
 
 	if ( ent->bDormant )
@@ -62,4 +102,14 @@ Vector3 Hack::GetBonePos( PlayerEnt* ent, int boneID )
 	bonePos.z = (*boneArrayAccess)[boneID].matrix[11];
 
 	return bonePos;
+}
+
+Vector3 Hack::TransformVector( Vector3 src, Vector3 ang, float d )
+{
+	Vector3 newPos{};
+	newPos.x = src.x + (cosf( TORAD( ang.y ) ) * d);
+	newPos.y = src.y + (sinf( TORAD( ang.y ) ) * d);
+	newPos.z = src.z + (tanf( TORAD( ang.x ) ) * d);
+
+	return newPos;
 }

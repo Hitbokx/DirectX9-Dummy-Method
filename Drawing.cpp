@@ -44,3 +44,71 @@ void DrawESPBox2D( vec2 top, vec2 bot, int thickness, D3DCOLOR color )
 	DrawLine( tl, bl, thickness, color );
 	DrawLine( tr, br, thickness, color );
 }
+
+void DrawESPBox3D( Vector3 top, Vector3 bot, float a, int width, int thickness, D3DCOLOR colour )
+{
+	int height3D = ABS(top.z - bot.z);
+	Vector3 b1, b2, b3, b4, t1, t2, t3, t4;
+	b1.z = b2.z = b3.z = b4.z = bot.z;
+
+	b1.x = bot.x + (cos( TORAD( a + 45 ) ) * width);
+	b1.y = bot.y + (sin( TORAD( a + 45 ) ) * width);
+
+	b2.x = bot.x + (cos( TORAD( a + 135 ) ) * width);
+	b2.y = bot.y + (sin( TORAD( a + 135 ) ) * width);
+
+	b3.x = bot.x + (cos( TORAD( a + 225 ) ) * width);
+	b3.y = bot.y + (sin( TORAD( a + 225 ) ) * width);
+
+	b4.x = bot.x + (cos( TORAD( a + 315 ) ) * width);
+	b4.y = bot.y + (sin( TORAD( a + 315 ) ) * width);
+
+	t1.x = b1.x;
+	t1.y = b1.y;
+	t1.z = b1.z + height3D;
+
+	t2.x = b2.x;
+	t2.y = b2.y;
+	t2.z = b2.z + height3D;
+
+	t3.x = b3.x;
+	t3.y = b3.y;
+	t3.z = b3.z + height3D;
+
+	t4.x = b4.x;
+	t4.y = b4.y;
+	t4.z = b4.z + height3D;
+
+	vec2 b1_2, b2_2, b3_2, b4_2, t1_2, t2_2, t3_2, t4_2;
+
+	if ( w2s( b1, b1_2 ) && w2s( b2, b2_2 ) && w2s( b3, b3_2 ) && w2s( b4, b4_2 ) && w2s( t1, t1_2 ) && w2s( t2, t2_2 ) && w2s( t3, t3_2 ) && w2s( t4, t4_2 ) )
+	{
+		DrawLine( t1_2, b1_2, thickness, colour );
+		DrawLine( t2_2, b2_2, thickness, colour );
+		DrawLine( t3_2, b3_2, thickness, colour );
+		DrawLine( t4_2, b4_2, thickness, colour );
+
+		DrawLine( t1_2, t2_2, thickness, colour );
+		DrawLine( t2_2, t3_2, thickness, colour );
+		DrawLine( t3_2, t4_2, thickness, colour );
+		DrawLine( t4_2, t1_2, thickness, colour );
+
+		DrawLine( b1_2, b2_2, thickness, colour );
+		DrawLine( b2_2, b3_2, thickness, colour );
+		DrawLine( b3_2, b4_2, thickness, colour );
+		DrawLine( b4_2, b1_2, thickness, colour );
+	}
+}
+
+void DrawText( const char* text, float x, float y, D3DCOLOR colour )
+{
+	RECT rect;
+	if ( !hack->FontF )
+		D3DXCreateFont( pDevice, 14, 0, FW_NORMAL, 1, false, DEFAULT_CHARSET, OUT_DEFAULT_PRECIS, ANTIALIASED_QUALITY, DEFAULT_PITCH | FF_DONTCARE, L"Aerial", &hack->FontF );
+
+	SetRect( &rect, x + 1, y + 1, x + 1, y + 1 );
+	hack->FontF->DrawTextA( NULL, text, -1, &rect, DT_CENTER | DT_NOCLIP, D3DCOLOR_ARGB( 255, 0, 0, 0 ) );
+
+	SetRect( &rect, x, y, x, y );
+	hack->FontF->DrawTextA( NULL, text, -1, &rect, DT_CENTER | DT_NOCLIP, colour );
+}
